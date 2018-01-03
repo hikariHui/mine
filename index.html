@@ -31,8 +31,8 @@
                     e.preventDefault();
                 }
             }
-            var xx = 9; //行
-            var yy = 9; //列
+            var xx = 25; //行
+            var yy = 25; //列
             var zz = 10; //雷数
             var exploredArea = 0;
             var field = new Object;
@@ -53,8 +53,7 @@
                 }
             } //布雷
             function setField(x, y, z) {
-                var container = document.getElementById("container");
-                container.style.width = y * 22 + "px";
+                document.getElementById("container").style.width = y * 22 + "px";
                 init();
                 for (var i = 0; i <= z - 1; i++) {
                     setMine(i, x, y);
@@ -64,7 +63,7 @@
                 for (var ix = 1; ix <= x; ix++) {
                     for (var iy = 1; iy <= y; iy++) {
                         var unitId = ix + "_" + iy;
-                        container.innerHTML += "<div id='" + unitId + "' class='unit' onclick='sweep(" + ix + ", " + iy + ")' onmousedown='flag(event, this)'></div>";
+                        document.getElementById("container").innerHTML += "<div id='" + unitId + "' class='unit' onclick='sweep(" + ix + ", " + iy + ")' onmousedown='flag(event, this)'></div>";
                         if (mineNum.indexOf(n) != -1) {
                             field[unitId] = "mine";
                             mineId[m] = unitId;
