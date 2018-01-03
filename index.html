@@ -26,6 +26,11 @@
         <h1>扫雷</h1>
         <div id="container"></div>
         <script>
+            window.onload = function () {
+                document.oncontextmenu = function (e) {
+                    e.preventDefault();
+                }
+            }
             var xx = 9; //行
             var yy = 9; //列
             var zz = 10; //雷数
@@ -57,7 +62,7 @@
                 for (var ix = 1; ix <= x; ix++) {
                     for (var iy = 1; iy <= y; iy++) {
                         var unitId = ix + "_" + iy;
-                        container.innerHTML += "<div id='" + unitId + "' class='unit' onclick='sweep(" + ix + ", " + iy + ")' title='0'></div>";
+                        container.innerHTML += "<div id='" + unitId + "' class='unit' onclick='sweep(" + ix + ", " + iy + ")' title='0' onmousedown='flag(event, this)'></div>";
                         if (mineNum.indexOf(n) != -1) {
                             field[unitId] = "mine";
                             mineId[m] = unitId;
@@ -68,8 +73,19 @@
                 }
                 console.log(mineId);
             }
+            function flag(e, element) {
+                if (e.button == 2) {
+                    if (element.innerHTML == "") {
+                        element.innerHTML = "<a style='color: green;'>F</a>";
+                    } else {
+                        element.innerHTML = "";
+                    }
+                }
+            }
             function sweep(x, y) {
                 var unitId = x + "_" + y;
+                document.getElementById(unitId).onclick = "";
+                document.getElementById(unitId).onmousedown = "";
                 document.getElementById(unitId).title = 1;
                 var around = 0;
                 if (field[unitId] == "mine") {
