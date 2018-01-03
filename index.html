@@ -38,12 +38,10 @@
             var field = new Object;
             var mineNum = new Array;
             var mineId = new Array;
-            var safeArea = new Array;
             function init() {
                 mineNum = new Array;
                 mineId = new Array;
                 field = new Object;
-                safeArea = new Array;
                 exploredArea = 0;
             }
             function setMine(i, x, y) {
@@ -63,7 +61,6 @@
                 }
                 var n = 1; //区域编号
                 var m = 0; //地雷编号
-                var s = 0; //安全区编号
                 for (var ix = 1; ix <= x; ix++) {
                     for (var iy = 1; iy <= y; iy++) {
                         var unitId = ix + "_" + iy;
@@ -72,9 +69,6 @@
                             field[unitId] = "mine";
                             mineId[m] = unitId;
                             m++;
-                        } else {
-                            safeArea[s] = unitId;
-                            s++;
                         }
                         n++;
                     }
