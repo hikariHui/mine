@@ -2,11 +2,108 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>扫雷</title>
         <link rel="stylesheet" type="text/css" href="">
-        <style type="text/css"></style>
+        <style type="text/css">
+            body{
+                text-align: center;
+            }
+            #container{
+                display: inline-block;
+            }
+            .unit{
+                display: inline-block;
+                float: left;
+                height: 20px;
+                width: 20px;
+                background-color: gray;
+                border: 1px outset;
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
-        <script></script>
+        <h1>扫雷</h1>
+        <div id="container"></div>
+        <script>
+            var xx = 9; //行
+            var yy = 9; //列
+            var zz = 10; //雷数
+            var field = new Object;
+            var mineNum = new Array;
+            var mineId = new Array;
+            function init() {
+                mineNum = new Array;
+                mineId = new Array;
+                field = new Object;
+            }
+            function setMine(i, x, y) {
+                var temp = 1 + Math.round((x * y - 1) * Math.random());
+                if (mineNum.indexOf(temp) == -1) {
+                    mineNum[i] = temp;
+                } else {
+                    setMine(i, x, y);
+                }
+            } //布雷
+            function setField(x, y, z) {
+                var container = document.getElementById("container");
+                container.style.width = y * 22 + "px";
+                init();
+                for (var i = 0; i <= z - 1; i++) {
+                    setMine(i, x, y);
+                }
+                var n = 1; //区域编号
+                var m = 0; //地雷编号
+                for (var ix = 1; ix <= x; ix++) {
+                    for (var iy = 1; iy <= y; iy++) {
+                        var unitId = ix + "_" + iy;
+                        container.innerHTML += "<div id='" + unitId + "' class='unit' onclick='sweep(" + ix + ", " + iy + ")' title='0'></div>";
+                        if (mineNum.indexOf(n) != -1) {
+                            field[unitId] = "mine";
+                            mineId[m] = unitId;
+                            m++;
+                        }
+                        n++;
+                    }
+                }
+                console.log(mineId);
+            }
+            function sweep(x, y) {
+                var unitId = x + "_" + y;
+                document.getElementById(unitId).title = 1;
+                var around = 0;
+                if (field[unitId] == "mine") {
+                    for (var i = 0; i <= mineId.length - 1; i++) {
+                        document.getElementById(mineId[i]).innerHTML = "<a style='color: red;'>X</a>";
+                    }
+                } else {
+                    for (var tempX = x - 1; tempX <= x + 1; tempX++) {
+                        for (var tempY = y - 1; tempY <= y + 1; tempY++) {
+                            var unitIdTemp = tempX + "_" + tempY;
+                            if (field[unitIdTemp] == "mine") {
+                                around = around + 1;
+                            }
+                        }
+                    }
+                    console.log(around);
+                    if (around != 0) {
+                        document.getElementById(unitId).innerHTML = around;
+                    } else if (around == 0) {
+                        document.getElementById(unitId).style.backgroundColor = "white";
+                        for (var tempX = x - 1; tempX <= x + 1; tempX++) {
+                            for (var tempY = y - 1; tempY <= y + 1; tempY++) {
+                                var unitIdTemp = tempX + "_" + tempY;
+                                if (tempX > 0 && tempX <= xx && tempY > 0 && tempY <= yy) {
+                                    if (document.getElementById(unitIdTemp).title == 0) {
+                                        sweep(tempX, tempY);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            setField(xx, yy, zz);
+        </script>
     </body>
 </html>
